@@ -2,7 +2,8 @@ import Togglable from "./Togglable";
 
 const Blog = ({blog, toggleLike, removeBlog}) => {
 
-    const me = window.localStorage.getItem('loggedUser')
+    const userFromStorage = window.localStorage.getItem('loggedUser')
+    const me = JSON.parse(userFromStorage)
 
     return (
       <li className="blog-item">
