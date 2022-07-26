@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Blog from './components/Blog'
 import Notification from "./components/Notification";
 import blogService from './services/blogs'
@@ -8,8 +8,8 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 
 const App = () => {
+  const blogFormRef = useRef()
   const [blogs, setBlogs] = useState([])
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -61,9 +61,11 @@ const App = () => {
   }
 
   const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     blogService.create(blogObject)
         .then(returnedObject => {
           setBlogs(blogs.concat(returnedObject))
+
           setMessage(`${returnedObject.title} added by ${returnedObject.author}`)
           setTimeout(() => {
               setMessage(null)
@@ -88,7 +90,7 @@ const App = () => {
           </Togglable> :
           <div>
             <p>{user.username} is logged<button className="button-logoff" onClick={handleLogOff}>log off</button></p>
-            <Togglable buttonLabel="new blog">
+            <Togglable buttonLabel="new blog" ref={blogFormRef}>
               <BlogForm createBlog={addBlog}/>
             </Togglable>
           </div>}

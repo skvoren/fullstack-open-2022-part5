@@ -1,10 +1,8 @@
-function LoginForm({username,
+const LoginForm = ({username,
                     password,
                     handleChangeUser,
                     handleChangePassword,
-                    handleSubmit}) {
-
-
+                    handleSubmit}) => {
     return (
         <form onSubmit={handleSubmit}>
             <div>
