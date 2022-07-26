@@ -55,10 +55,11 @@ const App = () => {
     }
   }
 
-  const logOffHandler = () => {
+  const handleLogOff = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
     blogService.setToken('')
+    setBlogs([])
   }
 
   const handleBlogCreate = (event) => {
@@ -99,7 +100,7 @@ const App = () => {
             />
           </Togglable> :
           <div>
-            <p>{user.username} is logged</p>
+            <p>{user.username} is logged<button className="button-logoff" onClick={handleLogOff}>log off</button></p>
             <Togglable buttonLabel="new blog">
               <BlogForm
                   title={title}
