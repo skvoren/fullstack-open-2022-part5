@@ -9,9 +9,7 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
@@ -62,26 +60,15 @@ const App = () => {
     setBlogs([])
   }
 
-  const handleBlogCreate = (event) => {
-    event.preventDefault()
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url,
-        id: blogs.length + 1
-      }
-
-      blogService.create(newBlog)
-          .then(result => {
-            setBlogs(blogs.concat(result))
-            setTitle('')
-            setAuthor('')
-            setUrl('')
-            setMessage(`${result.title} added by ${result.author}`)
-            setTimeout(() => {
+  const addBlog = (blogObject) => {
+    blogService.create(blogObject)
+        .then(returnedObject => {
+          setBlogs(blogs.concat(returnedObject))
+          setMessage(`${returnedObject.title} added by ${returnedObject.author}`)
+          setTimeout(() => {
               setMessage(null)
-            }, 5000)
-          })
+          }, 5000)
+        })
   }
 
   return (
@@ -102,15 +89,7 @@ const App = () => {
           <div>
             <p>{user.username} is logged<button className="button-logoff" onClick={handleLogOff}>log off</button></p>
             <Togglable buttonLabel="new blog">
-              <BlogForm
-                  title={title}
-                  author={author}
-                  url={url}
-                  handleChangeTitle={({target}) => setTitle(target.value)}
-                  hangleChangeAuthor={({target}) => setAuthor(target.value)}
-                  handleChangeUrl={({target}) => setUrl(target.url)}
-                  handleSubmit={handleBlogCreate}
-              />
+              <BlogForm createBlog={addBlog}/>
             </Togglable>
           </div>}
       <ul>
