@@ -30,6 +30,12 @@ const App = () => {
     }
   }, [])
 
+  const compareFunction = (a, b) => {
+    return b.likes - a.likes;
+  }
+
+  blogs.sort(compareFunction)
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
