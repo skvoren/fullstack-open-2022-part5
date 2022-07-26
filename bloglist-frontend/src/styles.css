@@ -1,0 +1,19 @@
+.notification {
+    color: red;
+    background-color: lightgray;
+    font-size: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.blog-form {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.blog-form input {
+    margin-bottom: 10px;
+}

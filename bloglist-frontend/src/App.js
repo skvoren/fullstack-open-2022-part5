@@ -11,7 +11,7 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -45,9 +45,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (e) {
-      setErrorMessage('wrong credentials')
+      setMessage('wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -84,25 +84,29 @@ const App = () => {
 
   const addNewBlog = (event) => {
     event.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url,
-      id: blogs.length + 1
-    }
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url,
+        id: blogs.length + 1
+      }
 
-    blogService.create(newBlog)
-        .then(result => {
-          setBlogs(blogs.concat(result))
-          setTitle('')
-          setAuthor('')
-          setUrl('')
-        })
+      blogService.create(newBlog)
+          .then(result => {
+            setBlogs(blogs.concat(result))
+            setTitle('')
+            setAuthor('')
+            setUrl('')
+            setMessage(`${result.title} added by ${result.author}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
   }
 
   const blogForm = () => (
       <div>
-        <form onSubmit={addNewBlog}>
+        <form className="blog-form" onSubmit={addNewBlog}>
           title <input value={title} onChange={({target}) => setTitle(target.value)}/>
           author <input value={author} onChange={({target}) => setAuthor(target.value)}/>
           url <input value={url} onChange={({target}) => setUrl(target.value)}/>
@@ -116,7 +120,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={errorMessage}></Notification>
+      <Notification message={message}></Notification>
 
       {user === null ? loginForm() : blogForm()}
 
