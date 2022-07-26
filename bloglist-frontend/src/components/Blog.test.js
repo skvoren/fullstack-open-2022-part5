@@ -62,3 +62,31 @@ test('render blog extended content', async () => {
     expect(urlElement).toBeDefined()
     expect(likes).toBeDefined()
 })
+
+test('test likes button pressed twice', async () => {
+    const testLogin = ({
+        username: 'testUserName',
+        token: 'key'
+    })
+
+    localStorage.setItem('loggedUser', JSON.stringify(testLogin))
+
+    const blog = {
+        title: 'Jarno',
+        author: 'Trulli',
+        url: 'Url',
+        likes: 10,
+        user: 'testUserName'
+    }
+
+    const mockHandler = jest.fn()
+
+    render(<Blog blog={blog} removeBlog={mockHandler} toggleLike={mockHandler}/>)
+
+    const user = userEvent.setup()
+    const button = screen.getByText('like')
+    await user.click(button)
+    await user.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+})
