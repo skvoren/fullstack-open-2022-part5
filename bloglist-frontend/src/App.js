@@ -79,6 +79,23 @@ const App = () => {
         })
   }
 
+  const removeBlog = id => {
+    const blog = blogs.find(b => b.id === id)
+    if (window.confirm(`remove blog ${blog.title}`)) {
+      blogService.remove(id)
+          .then(response => {
+            setBlogs(blogs.filter(blog => blog.id !== id))
+          })
+          .catch(e => {
+            setMessage(`Blog ${blog.title} was already removed from server`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+            setBlogs(blogs.filter(blog => blog.id !== id))
+          })
+    }
+  }
+
   const toggleLike = id => {
     const blog = blogs.find(b => b.id === id)
     const changedBlog = {...blog, likes: blog.likes + 1}
@@ -124,6 +141,7 @@ const App = () => {
                   key={blog.id}
                   blog={blog}
                   toggleLike={() => toggleLike(blog.id)}
+                  removeBlog={() => removeBlog(blog.id)}
               />
         )}
       </ul>
