@@ -62,7 +62,8 @@ const App = () => {
 
   const blogForm = () => (
       <form>
-          <input placeholder="blank"/>
+        <p>{user.username} is logged in</p>
+        {blogs.map(blog => <Blog key={blog.id} blog={blog}/>)}
       </form>
   )
 
@@ -72,8 +73,6 @@ const App = () => {
       <Notification message={errorMessage}></Notification>
 
       {user === null ? loginForm() : blogForm()}
-
-      {user !== null && blogs.map(blog => <Blog key={blog.id} blog={blog}/>)}
 
     </div>
   )
