@@ -21,3 +21,16 @@
 .button-logoff {
     margin-left: 10px;
 }
+
+.blog-item {
+    padding-top: 10px;
+    padding-left: 2px;
+    border: 1px solid black;
+    margin-bottom: 5px;
+    list-style: none;
+    max-width: 500px;
+}
+
+.button-like {
+    margin-left: 10px;
+}
