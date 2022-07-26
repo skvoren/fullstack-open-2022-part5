@@ -73,6 +73,24 @@ const App = () => {
         })
   }
 
+  const toggleLike = id => {
+    const blog = blogs.find(b => b.id === id)
+    const changedBlog = {...blog, likes: blog.likes + 1}
+
+    blogService
+        .update(id, changedBlog)
+        .then(returnedBlog => {
+          setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+        })
+        .catch(e => {
+          setMessage(`Blog ${blog.title} was already removed from server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          setBlogs(blogs.filter(b => b.id !== id))
+        })
+  }
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -99,6 +117,7 @@ const App = () => {
               <Blog
                   key={blog.id}
                   blog={blog}
+                  toggleLike={() => toggleLike(blog.id)}
               />
         )}
       </ul>
