@@ -3,6 +3,9 @@ import Blog from './components/Blog'
 import Notification from "./components/Notification";
 import blogService from './services/blogs'
 import loginService from './services/login'
+import LoginForm from "./components/LoginForm";
+import BlogForm from "./components/BlogForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -58,31 +61,7 @@ const App = () => {
     blogService.setToken('')
   }
 
-  const loginForm = () => (
-    <div>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input type="text"
-                 value={username}
-                 name="Username"
-                 onChange={({target}) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input type="password"
-                 value={password}
-                 name="Password"
-                 onChange={({target}) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  )
-
-  const addNewBlog = (event) => {
+  const handleBlogCreate = (event) => {
     event.preventDefault()
       const newBlog = {
         title: title,
@@ -104,26 +83,43 @@ const App = () => {
           })
   }
 
-  const blogForm = () => (
-      <div>
-        <form className="blog-form" onSubmit={addNewBlog}>
-          title <input value={title} onChange={({target}) => setTitle(target.value)}/>
-          author <input value={author} onChange={({target}) => setAuthor(target.value)}/>
-          url <input value={url} onChange={({target}) => setUrl(target.value)}/>
-          <button type="submit">create</button>
-        </form>
-        <p>{user.username} is logged in <button type="button" onClick={logOffHandler}>log off</button></p>
-        <div>{blogs.map(blog => <Blog key={blog.id} blog={blog}/>)}</div>
-      </div>
-  )
-
   return (
     <div>
-      <h2>blogs</h2>
+      <h1>Blogs</h1>
       <Notification message={message}></Notification>
 
-      {user === null ? loginForm() : blogForm()}
-
+      {user === null ?
+          <Togglable buttonLabel="login">
+            <LoginForm
+              username={username}
+              password={password}
+              handleChangeUser={({target}) => setUsername(target.value)}
+              handleChangePassword={({target}) => setPassword(target.value)}
+              handleSubmit={handleLogin}
+            />
+          </Togglable> :
+          <div>
+            <p>{user.username} is logged</p>
+            <Togglable buttonLabel="new blog">
+              <BlogForm
+                  title={title}
+                  author={author}
+                  url={url}
+                  handleChangeTitle={({target}) => setTitle(target.value)}
+                  hangleChangeAuthor={({target}) => setAuthor(target.value)}
+                  handleChangeUrl={({target}) => setUrl(target.url)}
+                  handleSubmit={handleBlogCreate}
+              />
+            </Togglable>
+          </div>}
+      <ul>
+        {blogs.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            />
+        )}
+      </ul>
     </div>
   )
 }
