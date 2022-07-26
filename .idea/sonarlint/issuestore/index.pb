@@ -1,8 +1,4 @@
 
-S
-#bloglist-frontend/package-lock.json,f/f/ffc2e870f412e2e33a925b38616912731bc50e0c
-N
-bloglist-frontend/package.json,2/f/2fd2b0c922abfb89d7f5ff5b49a8adecb6084a2a
 V
 &bloglist-frontend/public/manifest.json,d/9/d9dc13a259e4e86e851bbfa78e25cdacdded2ec1
 S

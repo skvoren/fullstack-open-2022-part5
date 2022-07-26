@@ -1,11 +1,11 @@
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import Notification from "./components/Notification";
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
-import Togglable from "./components/Togglable";
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const blogFormRef = useRef()
@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(initialBlogs => {
       setBlogs( initialBlogs )
-      })
+    })
   }, [user])
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const App = () => {
   }, [])
 
   const compareFunction = (a, b) => {
-    return b.likes - a.likes;
+    return b.likes - a.likes
   }
 
   blogs.sort(compareFunction)
@@ -45,7 +45,7 @@ const App = () => {
       })
 
       window.localStorage.setItem(
-          'loggedUser', JSON.stringify(userToLogin)
+        'loggedUser', JSON.stringify(userToLogin)
       )
       setUser(userToLogin)
       blogService.setToken(userToLogin.token)
@@ -69,49 +69,49 @@ const App = () => {
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     blogService.create(blogObject)
-        .then(returnedObject => {
-          setBlogs(blogs.concat(returnedObject))
+      .then(returnedObject => {
+        setBlogs(blogs.concat(returnedObject))
 
-          setMessage(`${returnedObject.title} added by ${returnedObject.author}`)
-          setTimeout(() => {
-              setMessage(null)
-          }, 5000)
-        })
+        setMessage(`${returnedObject.title} added by ${returnedObject.author}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
   }
 
   const removeBlog = id => {
     const blog = blogs.find(b => b.id === id)
     if (window.confirm(`remove blog ${blog.title}`)) {
       blogService.remove(id)
-          .then(response => {
-            setBlogs(blogs.filter(blog => blog.id !== id))
-          })
-          .catch(e => {
-            setMessage(`Blog ${blog.title} was already removed from server`)
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000)
-            setBlogs(blogs.filter(blog => blog.id !== id))
-          })
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+        })
+        .catch(() => {
+          setMessage(`Blog ${blog.title} was already removed from server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          setBlogs(blogs.filter(blog => blog.id !== id))
+        })
     }
   }
 
   const toggleLike = id => {
     const blog = blogs.find(b => b.id === id)
-    const changedBlog = {...blog, likes: blog.likes + 1}
+    const changedBlog = { ...blog, likes: blog.likes + 1 }
 
     blogService
-        .update(id, changedBlog)
-        .then(returnedBlog => {
-          setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
-        })
-        .catch(e => {
-          setMessage(`Blog ${blog.title} was already removed from server`)
-          setTimeout(() => {
-            setMessage(null)
-          }, 5000)
-          setBlogs(blogs.filter(b => b.id !== id))
-        })
+      .update(id, changedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      })
+      .catch(() => {
+        setMessage(`Blog ${blog.title} was already removed from server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setBlogs(blogs.filter(b => b.id !== id))
+      })
   }
 
   return (
@@ -120,29 +120,29 @@ const App = () => {
       <Notification message={message}></Notification>
 
       {user === null ?
-          <Togglable buttonLabel="login">
-            <LoginForm
-              username={username}
-              password={password}
-              handleChangeUser={({target}) => setUsername(target.value)}
-              handleChangePassword={({target}) => setPassword(target.value)}
-              handleSubmit={handleLogin}
-            />
-          </Togglable> :
-          <div>
-            <p>{user.username} is logged<button className="button-logoff" onClick={handleLogOff}>log off</button></p>
-            <Togglable buttonLabel="new blog" ref={blogFormRef}>
-              <BlogForm createBlog={addBlog}/>
-            </Togglable>
-          </div>}
+        <Togglable buttonLabel="login">
+          <LoginForm
+            username={username}
+            password={password}
+            handleChangeUser={({ target }) => setUsername(target.value)}
+            handleChangePassword={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+        </Togglable> :
+        <div>
+          <p>{user.username} is logged<button className="button-logoff" onClick={handleLogOff}>log off</button></p>
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogForm createBlog={addBlog}/>
+          </Togglable>
+        </div>}
       <ul>
         {blogs.map(blog =>
-              <Blog
-                  key={blog.id}
-                  blog={blog}
-                  toggleLike={() => toggleLike(blog.id)}
-                  removeBlog={() => removeBlog(blog.id)}
-              />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            toggleLike={() => toggleLike(blog.id)}
+            removeBlog={() => removeBlog(blog.id)}
+          />
         )}
       </ul>
     </div>
