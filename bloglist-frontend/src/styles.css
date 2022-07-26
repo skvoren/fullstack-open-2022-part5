@@ -1,3 +1,11 @@
+ul {
+    list-style: none;
+}
+
+button {
+    margin: 10px;
+}
+
 .notification {
     color: red;
     background-color: lightgray;
@@ -29,8 +37,4 @@
     margin-bottom: 5px;
     list-style: none;
     max-width: 500px;
-}
-
-.button-like {
-    margin-left: 10px;
 }

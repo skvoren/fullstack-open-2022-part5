@@ -21,8 +21,8 @@ test('render blog content', () => {
 
     render(<Blog blog={blog} removeBlog={() => {}} toggleLike={() => {}}/>)
 
-    const titleElement = screen.getByText('Jarno')
-    const authorElement = screen.getByText('Trulli')
+    const titleElement = screen.getByText('title: Jarno')
+    const authorElement = screen.getByText('author: Trulli')
 
     expect(titleElement).toBeDefined()
     expect(authorElement).toBeDefined()
@@ -52,10 +52,10 @@ test('render blog extended content', async () => {
     const button = screen.getByText('view')
     await user.click(button)
 
-    const titleElement = screen.getByText('Jarno')
-    const authorElement = screen.getByText('Trulli')
-    const urlElement = screen.getByText('Url')
-    const likes = screen.getByText(10)
+    const titleElement = screen.getByText('title: Jarno')
+    const authorElement = screen.getByText('author: Trulli')
+    const urlElement = screen.getByText('url: Url')
+    const likes = screen.getByText('likes: 10')
 
     expect(titleElement).toBeDefined()
     expect(authorElement).toBeDefined()

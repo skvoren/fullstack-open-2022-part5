@@ -8,14 +8,18 @@ const Blog = ({ blog, toggleLike, removeBlog }) => {
 
     return (
         <li className="blog">
-            <p>{blog.title}</p>
-            <p>{blog.author}</p>
+            <ul>
+                <li>title: {blog.title}</li>
+                <li>author: {blog.author}</li>
+            </ul>
             <Togglable buttonLabel="view">
-                <p>{blog.url}</p>
-                <p>{blog.likes}</p>
+                <ul>
+                    <li>url: {blog.url}</li>
+                    <li>likes: {blog.likes}</li>
+                </ul>
                 <button className="button-like" onClick={toggleLike} type="button">like</button>
             </Togglable>
-            {blog.user.username !== null && blog.user.username === me.username && <button type="button" onClick={removeBlog}>delete</button>}
+            {blog.user.username !== null && blog.user.username === me.username && <button type="button" onClick={removeBlog} className="button-delete">delete</button>}
         </li>
     )
 }
