@@ -16,6 +16,7 @@ describe('Blog app', () => {
 
   it('login form can be opened', () => {
     cy.contains('login').click()
+
   })
 
   it('user can be log in', () => {
@@ -27,24 +28,11 @@ describe('Blog app', () => {
     cy.contains('testUser is logged')
   })
 
-  it('login fails with incorrect creds', () => {
-      cy.contains('login').click()
-      cy.get('#username').type('incorrectUser')
-      cy.get('#password').type('incorrectPassword')
-      cy.get('#login-button').click()
-
-      cy.contains('wrong credentials')
-  })
-
   describe('when logged in', () => {
       beforeEach(() => {
-          cy.contains('login').click()
-          cy.get('#username').type('testUser')
-          cy.get('#password').type('test123!')
-          cy.get('#login-button').click()
-
-          cy.contains('testUser is logged')
+          cy.login({username: 'testUser', password: 'test123!'})
       })
+
       it('create new blog with a correct creds', () => {
           cy.contains('new blog').click()
           cy.get('#titleFormField').type('Sebastian')
@@ -53,15 +41,31 @@ describe('Blog app', () => {
           cy.get('#createBlogButton').click()
           cy.contains('Sebastian added by Vettel')
       })
-      it('user can like blog', () => {
-          cy.contains('new blog').click()
-          cy.get('#titleFormField').type('Like')
-          cy.get('#authorFormField').type('Test')
-          cy.get('#urlFormField').type('Here')
-          cy.get('#createBlogButton').click()
-          cy.contains('Like added by Test')
-          cy.contains('view').click()
-          cy.get('#button-like').click()
+
+      describe('some blogs exists', () => {
+          beforeEach(() => {
+              cy.createBlog({title: '1stTitle', author: '1stAuthor', url: '1stUrl', likes: '10'})
+              cy.createBlog({title: '2ndTitle', author: '2ndAuthor', url: '2ndUrl', likes: '11'})
+              cy.createBlog({title: '3rdTitle', author: '3rdAuthor', url: '3rdUrl', likes: '12'})
+          })
+
+          it('can click like', () => {
+              cy.contains('2ndTitle').parent().as('2ndBlog')
+              cy.get('@2ndBlog').parent().find('#view').as('viewButton')
+              cy.get('@viewButton').click()
+              cy.get('@2ndBlog').parent().find('#button-like').as('likeButton')
+              cy.get('@likeButton').click()
+              cy.get("html").should('contain', 'likes: 12')
+          })
       })
+  })
+
+    it('login fails with incorrect creds', () => {
+        cy.contains('login').click()
+        cy.get('#username').type('incorrectUser')
+        cy.get('#password').type('incorrectPassword')
+        cy.get('#login-button').click()
+
+        cy.contains('wrong credentials')
     })
 })
