@@ -33,6 +33,16 @@ Cypress.Commands.add('login', ({username, password}) => {
     })
 })
 
+Cypress.Commands.add('addUser', () => {
+    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    const user = {
+        name: 'TestUser',
+        username: 'testUser',
+        password: 'test123!'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user)
+})
+
 Cypress.Commands.add('createBlog', ({title, author, url, likes}) => {
     cy.request({
         url: 'http://localhost:3003/api/blogs',
@@ -44,4 +54,13 @@ Cypress.Commands.add('createBlog', ({title, author, url, likes}) => {
     })
 
     cy.visit('http://localhost:3000')
+})
+
+Cypress.Commands.add('addFakeUser', () => {
+    const user = {
+        name: 'TestUser2',
+        username: 'testUser2',
+        password: 'test123!'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user)
 })

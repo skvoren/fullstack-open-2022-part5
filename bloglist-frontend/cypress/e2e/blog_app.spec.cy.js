@@ -1,12 +1,5 @@
 describe('Blog app', () => {
   beforeEach(() => {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
-        name: 'TestUser',
-        username: 'testUser',
-        password: 'test123!'
-    }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
   })
 
@@ -16,7 +9,6 @@ describe('Blog app', () => {
 
   it('login form can be opened', () => {
     cy.contains('login').click()
-
   })
 
   it('user can be log in', () => {
@@ -30,6 +22,7 @@ describe('Blog app', () => {
 
   describe('when logged in', () => {
       beforeEach(() => {
+          cy.addUser()
           cy.login({username: 'testUser', password: 'test123!'})
       })
 
@@ -56,6 +49,23 @@ describe('Blog app', () => {
               cy.get('@2ndBlog').parent().find('#button-like').as('likeButton')
               cy.get('@likeButton').click()
               cy.get("html").should('contain', 'likes: 12')
+          })
+
+          it('can delete blog', () => {
+              cy.contains('2ndTitle').parent().as('2ndBlog')
+              cy.get('@2ndBlog').parent().find('#button-delete').as('deleteButton')
+              cy.get('@deleteButton').click()
+              cy.on('window:confirm', () => true)
+              cy.get('html').should('not.contain', '2ndTitle')
+          })
+
+          it('login with another cred', () => {
+              cy.addFakeUser()
+              cy.login({username: 'testUser2', password: 'test123!'})
+
+              it.only("can't delete blog", () => {
+                  cy.get('html').should('not.contain', '#button-delete')
+              })
           })
       })
   })
