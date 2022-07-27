@@ -27,6 +27,15 @@ describe('Blog app', () => {
     cy.contains('testUser is logged')
   })
 
+  it('login fails with incorrect creds', () => {
+      cy.contains('login').click()
+      cy.get('#username').type('incorrectUser')
+      cy.get('#password').type('incorrectPassword')
+      cy.get('#login-button').click()
+
+      cy.contains('wrong credentials')
+  })
+
   describe('when logged in', () => {
       beforeEach(() => {
           cy.contains('login').click()
@@ -36,13 +45,17 @@ describe('Blog app', () => {
 
           cy.contains('testUser is logged')
       })
-      it('create new blog', () => {
+      it('create new blog with a correct creds', () => {
           cy.contains('new blog').click()
           cy.get('#titleFormField').type('Sebastian')
           cy.get('#authorFormField').type('Vettel')
           cy.get('#urlFormField').type('World Champion 4x')
           cy.get('#createBlogButton').click()
           cy.contains('Sebastian added by Vettel')
+      })
+
+      it('fails with wrong creds', () => {
+
       })
     })
 })
