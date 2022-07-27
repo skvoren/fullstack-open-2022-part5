@@ -44,16 +44,16 @@ describe('Blog app', () => {
 
           it('can click like', () => {
               cy.contains('2ndTitle').parent().as('2ndBlog')
-              cy.get('@2ndBlog').parent().find('#view').as('viewButton')
+              cy.get('@2ndBlog').parent().find('.view').as('viewButton')
               cy.get('@viewButton').click()
-              cy.get('@2ndBlog').parent().find('#button-like').as('likeButton')
+              cy.get('@2ndBlog').parent().find('.button-like').as('likeButton')
               cy.get('@likeButton').click()
               cy.get("html").should('contain', 'likes: 12')
           })
 
           it('can delete blog', () => {
               cy.contains('2ndTitle').parent().as('2ndBlog')
-              cy.get('@2ndBlog').parent().find('#button-delete').as('deleteButton')
+              cy.get('@2ndBlog').parent().find('.button-delete').as('deleteButton')
               cy.get('@deleteButton').click()
               cy.on('window:confirm', () => true)
               cy.get('html').should('not.contain', '2ndTitle')
@@ -64,8 +64,28 @@ describe('Blog app', () => {
               cy.login({username: 'testUser2', password: 'test123!'})
 
               it.only("can't delete blog", () => {
-                  cy.get('html').should('not.contain', '#button-delete')
+                  cy.get('html').should('not.contain', '.button-delete')
               })
+          })
+
+          it.only('check sort by likes', () => {
+
+              cy.get('.view').click({multiple: true})
+
+              cy.get('.blog').eq(1).find('.likes-text').should('contain', 'likes: 12')
+              cy.get('.blog').eq(2).find('.likes-text').should('contain', 'likes: 11')
+              cy.get('.blog').eq(3).find('.likes-text').should('contain', 'likes: 10')
+
+              cy.get('.blog').eq(2).find('.button-like')
+
+              for (let i = 0; i < 2; i++) {
+                  cy.get('.blog').eq(2).find('.button-like').click({timeout: 1000})
+                  cy.wait(2000)
+              }
+
+              cy.get('.blog').eq(1).find('.likes-text').should('contain', 'likes: 13')
+              cy.get('.blog').eq(2).find('.likes-text').should('contain', 'likes: 12')
+              cy.get('.blog').eq(3).find('.likes-text').should('contain', 'likes: 10')
           })
       })
   })
