@@ -53,9 +53,15 @@ describe('Blog app', () => {
           cy.get('#createBlogButton').click()
           cy.contains('Sebastian added by Vettel')
       })
-
-      it('fails with wrong creds', () => {
-
+      it('user can like blog', () => {
+          cy.contains('new blog').click()
+          cy.get('#titleFormField').type('Like')
+          cy.get('#authorFormField').type('Test')
+          cy.get('#urlFormField').type('Here')
+          cy.get('#createBlogButton').click()
+          cy.contains('Like added by Test')
+          cy.contains('view').click()
+          cy.get('#button-like').click()
       })
     })
 })

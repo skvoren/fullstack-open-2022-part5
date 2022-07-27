@@ -17,7 +17,7 @@ const Blog = ({ blog, toggleLike, removeBlog }) => {
                     <li>url: {blog.url}</li>
                     <li>likes: {blog.likes}</li>
                 </ul>
-                <button className="button-like" onClick={toggleLike} type="button">like</button>
+                <button className="button-like" onClick={toggleLike} id="button-like" type="button">like</button>
             </Togglable>
             {blog.user.username !== null && blog.user.username === me.username && <button type="button" onClick={removeBlog} className="button-delete">delete</button>}
         </li>
